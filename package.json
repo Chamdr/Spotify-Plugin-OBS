@@ -1,0 +1,28 @@
+{
+  "name": "spotifypluginobs",
+  "version": "1.0.0",
+  "description": "Plugin OBS permettant d'afficher la musique jouée sur Spotify sur un live avec le logiciel OBS",
+  "main": "configApp/index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DrakLulu/Spotify-Plugin-OBS.git"
+  },
+  "keywords": [
+    "obs",
+    "spotify",
+    "plugin"
+  ],
+  "author": "Fl0w & DrakLulu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DrakLulu/Spotify-Plugin-OBS/issues"
+  },
+  "homepage": "https://github.com/DrakLulu/Spotify-Plugin-OBS#readme",
+  "dependencies": {
+    "electron": "^6.0.7",
+    "express": "^4.17.1"
+  }
+}
