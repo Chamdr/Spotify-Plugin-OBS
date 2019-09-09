@@ -6,14 +6,13 @@ let win
 function createWindow() {
     // Créer le browser window.
     win = new BrowserWindow({
-        /*width: 800,
-        height: 600,*/
+        width: 800,
+        height: 600,
+        file: '../app.html',
         webPreferences: {
             nodeIntegration: true
         }
     })
-
-    win.loadURL("https://google.fr")
 
     win.on('closed', () => {
         win = null
