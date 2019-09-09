@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  
+</head>
+
+<body>
+    <center>
+        <h1>Configuration terminer</h1>
+        <h2>Il ne vous reste plus que a inserer ce lien dans obs : </h2>
+        
+
+        <h3 id="urlbox"></h3>
+            <button type="button" class="btn btn-outline-success" data-clipboard-target="#urlbox">
+                <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+                <img src="https://clipboardjs.com/assets/images/clippy.svg" width="13" alt="Copy to clipboard">
+            </button>
+    </center>
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
+
+<script>
+    $.ajax("/url").then((data) => {
+        document.getElementById("urlbox").innerHTML = data.url
+        console.log(data)
+    })
+    clipboard = new ClipboardJS('.btn')
+    clipboard.on('success', function (e) {
+        e.clearSelection();
+    }); 
+</script>
+
+</html>
