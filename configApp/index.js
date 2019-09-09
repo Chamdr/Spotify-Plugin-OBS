@@ -2,37 +2,34 @@ const { app, BrowserWindow } = require('electron')
 const querystring = require('querystring')
 const request = require("request")
 const express = require("express")
-const path = require("path")
-const fs = require("fs")
 
 const client_id = "bf05f03c90364683a6ff33ba75ab909a"
 const client_secret = "9ba17feecc2c4beb961a9a092fe60f48"
 
 const redirect_uri = "http://localhost:1764/callback"
 let http = express()
-http.use(express.static("public"))
 let state
 let win
 
 function createWindow() {
     win = new BrowserWindow({
-        width: 500,
-        height: 750,
+        /*width: 800,
+        height: 600,*/
         webPreferences: {
-            nodeIntegration: false
-        },
-        autoHideMenuBar: true
+            nodeIntegration: true
+        }
     })
     const scope = "user-read-currently-playing"
     state = generateRandomString(16)
+
     win.loadURL('https://accounts.spotify.com/authorize?' +
         querystring.stringify({
             response_type: 'code',
             client_id: client_id,
             scope: scope,
             redirect_uri: redirect_uri,
-            state: state,
-            show_dialog: false
+            state:state,
+            show_dialog:true
         }))
 
     win.on('closed', () => {
@@ -59,7 +56,7 @@ http.get('/callback', function (req, res) {
     const queryState = req.query.state || null;
 
     if (queryState === null || queryState !== state) {
-        //handle error
+        console.log("callback")
     } else {
         const authOptions = {
             url: 'https://accounts.spotify.com/api/token',
@@ -82,12 +79,8 @@ http.get('/callback', function (req, res) {
 
                 console.log(`access token: ${access_token}`)
                 console.log(`refresh token: ${refresh_token}`)
-                const obj = {
-                    url: path.join(__dirname, "..", "plugin", "index.html"),
-                    refresh_token: refresh_token
-                }
-                fs.writeFile(path.join(__dirname, "..", "plugin", "config.json"), JSON.stringify(obj), (err) => { if (err) console.error(err) })
-                res.sendFile(path.join(__dirname, "index.html"))
+
+                res.send(`access token: ${access_token} \n refresh token: ${refresh_token}`)
             } else {
                 //handle error
             }
@@ -95,19 +88,15 @@ http.get('/callback', function (req, res) {
     }
 });
 
-http.get("/url", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "plugin", "config.json"))
-})
-
 console.log('Listening on 1764');
 http.listen(1764);
 
 function generateRandomString(length) {
     var text = '';
     var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
+  
     for (var i = 0; i < length; i++) {
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     return text;
-};
+  };
