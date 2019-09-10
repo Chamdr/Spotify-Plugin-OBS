@@ -5,22 +5,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  
+    <link rel="stylesheet" type="text/css" href="./public/style.css">
 </head>
+<style>
+body {
+  background-color: white;
+  color: #363e61;
+  font-family: 'Operator Mono';
+}
+footer{
+margin-top: 50%;
+}
+button{
+  border: 2px solid #4CAF50;
+  border-radius: 30px;
+  background-color: #4CAF50;
+  color: black;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+  color: white;
+}
+button:hover {
+  background-color: rgb(76, 204, 80);
+  border-color: rgb(76, 204, 80);
+}
+p{
+margin: 50px;
+}
+</style>
 
 <body>
     <center>
-        <h1>Configuration terminer</h1>
-        <h2>Il ne vous reste plus que a inserer ce lien dans obs : </h2>
+        <h1>Configuration terminée</h1>
+        <h2>Il ne vous reste plus qu'à inserer ce lien dans OBS : </h2>
         
 
         <h3 id="urlbox"></h3>
             <button type="button" class="btn btn-outline-success" data-clipboard-target="#urlbox">
                 <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
-                <img src="https://clipboardjs.com/assets/images/clippy.svg" width="13" alt="Copy to clipboard">
             </button>
+            <p>Vous pouvez fermer cette fenêtre et utiliser le lien ci-dessus dans OBS!<br> N'oubliez pas de quitter le service dans la barre des tâche une fois votre stream terminé!</p>
     </center>
 </body>
+<footer><center><p >Application developpée par: <br> DrakLulu & Fl0w <br> Icône par Cptn_Toshiro</p></center></footer>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
