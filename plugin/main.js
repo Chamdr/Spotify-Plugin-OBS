@@ -21,31 +21,34 @@ function getSpotifyJson(token){
       },
       success: function(responded) {
         var i = "0";
-        if(title != oldTitle)
+        var a = "2";
         title = (responded.item.name);
-        var image = (responded.item.album.images[i].url);
-        var artist = (responded.item.artists[i].name);
-        //add featuring artist later?
-        oldTitle = title;
-        displayPlayedMusic(title,image,artist);
+        if(title != oldTitle){
+          var image = (responded.item.album.images[a].url);
+          var artist = (responded.item.artists[i].name);
+          //add featuring artist later?
+          oldTitle = title;
+          displayPlayedMusic(title,image,artist);
+        }
       }
   });
 }
-
 
 //display name, artist and image on the htlm page
 function displayPlayedMusic(title,image,artist){
   $("#artist").text(artist);
   $("#title").text(title);
   $("#image").attr("src", image);
-  
+  var artlen = $("#artist").text().length;
+    if ( artlen > 17) {
+      $("#artist").replaceWith($('<marquee id="artist">' + artist + '</marquee>'));
+    }else {
+      $("#artist").replaceWith($('<p id="artist">' + artist + '</p>'));
+    }
+  var titlen = $("#title").text().length;
+    if ( titlen > 17) {
+      $("#title").replaceWith($('<marquee id="title">' + title + '</marquee>'));
+    }else {
+      $("#title").replaceWith($('<p id="title">' + title + '</p>'));
+    }
 }
-
-
-//make the text slidig right to left ( called if chain > 15 carac)
-function slindingText(){
-}
-
-//dir for the HTML display 
-//       C:\Users\charl\Documents\Spotify-Plugin-OBS\plugin\index.html
-// GET https://api.spotify.com/v1/me/player/currently-playing
