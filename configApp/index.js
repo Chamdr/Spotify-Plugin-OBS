@@ -80,13 +80,11 @@ http.get('/callback', function (req, res) {
                 const access_token = body.access_token
                 const refresh_token = body.refresh_token
 
-                console.log(`access token: ${access_token}`)
-                console.log(`refresh token: ${refresh_token}`)
                 const obj = {
                     url: path.join(__dirname, "..", "plugin", "index.html"),
                     refresh_token: refresh_token
                 }
-                fs.writeFile(path.join(__dirname, "..", "plugin", "config.json"), JSON.stringify(obj), (err) => { if (err) console.error(err) })
+                fs.writeFile(path.join(__dirname, "..", "plugin", "config.json"),"data = "+ JSON.stringify(obj), (err) => { if (err) console.error(err) })
                 res.sendFile(path.join(__dirname, "index.html"))
             } else {
                 //handle error
