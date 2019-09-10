@@ -80,8 +80,6 @@ http.get('/callback', function (req, res) {
                 const access_token = body.access_token
                 const refresh_token = body.refresh_token
 
-                console.log(`access token: ${access_token}`)
-                console.log(`refresh token: ${refresh_token}`)
                 const obj = {
                     url: path.join(__dirname, "..", "plugin", "index.html"),
                     refresh_token: refresh_token
