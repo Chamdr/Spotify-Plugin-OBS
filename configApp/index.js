@@ -3,6 +3,7 @@ const querystring = require('querystring')
 const request = require("request")
 const express = require("express")
 const path = require("path")
+const slash = require("slash")
 const fs = require("fs")
 
 const client_id = "bf05f03c90364683a6ff33ba75ab909a"
@@ -79,9 +80,10 @@ http.get('/callback', function (req, res) {
 
                 const access_token = body.access_token
                 const refresh_token = body.refresh_token
+                const url = slash(path.join(__dirname, "..", "plugin", "index.html"))
 
                 const obj = {
-                    url: path.join(__dirname, "..", "plugin", "index.html"),
+                    url: url,
                     refresh_token: refresh_token
                 }
                 fs.writeFile(path.join(__dirname, "..", "plugin", "config.json"),"data = "+ JSON.stringify(obj), (err) => { if (err) console.error(err) })

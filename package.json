@@ -25,6 +25,7 @@
     "electron": "^6.0.7",
     "express": "^4.17.1",
     "querystring": "^0.2.0",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "slash": "^3.0.0"
   }
 }
