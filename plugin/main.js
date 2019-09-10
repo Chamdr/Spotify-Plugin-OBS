@@ -21,12 +21,12 @@ function getSpotifyJson(token){
       },
       success: function(responded) {
         var i = "0";
-        if(title == oldTitle)
+        if(title != oldTitle)
         title = (responded.item.name);
         var image = (responded.item.album.images[i].url);
         var artist = (responded.item.artists[i].name);
         //add featuring artist later?
-        title = oldTitle;
+        oldTitle = title;
         displayPlayedMusic(title,image,artist);
       }
   });
