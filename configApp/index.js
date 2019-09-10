@@ -86,7 +86,7 @@ http.get('/callback', function (req, res) {
                     url: url,
                     refresh_token: refresh_token
                 }
-                fs.writeFile(path.join(__dirname, "..", "plugin", "config.json"),"data = "+ JSON.stringify(obj), (err) => { if (err) console.error(err) })
+                fs.writeFile(path.join(__dirname, "..", "plugin", "config.json"), `data = '${JSON.stringify(obj)}'`, (err) => { if (err) console.error(err) })
                 res.sendFile(path.join(__dirname, "index.html"))
             } else {
                 //handle error
