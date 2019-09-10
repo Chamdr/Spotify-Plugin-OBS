@@ -1,10 +1,10 @@
-var tilte;
-var oldTitle
+let tilte;
+let oldTitle
 //open plugin/config.json
 setInterval(() => {
-  var jsondata = JSON.parse(data);
-  var token = jsondata.refresh_token;
-  var path = jsondata.url;
+  let jsondata = JSON.parse(data);
+  let token = jsondata.refresh_token;
+  let path = jsondata.url;
   getSpotifyJson(token);
 }, 1 * 1000);
 
@@ -22,12 +22,12 @@ function getSpotifyJson(token) {
       'Content-Type': 'application/json',
     },
     success: function (responded) {
-      var i = "0";
-      var a = "2";
+      let i = "0";
+      let a = "2";
       title = (responded.item.name);
       if (title != oldTitle) {
-        var image = (responded.item.album.images[a].url);
-        var artist = (responded.item.artists[i].name);
+        let image = (responded.item.album.images[a].url);
+        let artist = (responded.item.artists[i].name);
         //add featuring artist later?
         oldTitle = title;
         displayPlayedMusic(title, image, artist);
@@ -41,13 +41,13 @@ function displayPlayedMusic(title, image, artist) {
   $("#artist").text(artist);
   $("#title").text(title);
   $("#image").attr("src", image);
-  var artlen = $("#artist").text().length;
+  let artlen = $("#artist").text().length;
   if (artlen > 17) {
     $("#artist").replaceWith($('<marquee id="artist">' + artist + '</marquee>'));
   } else {
     $("#artist").replaceWith($('<p id="artist">' + artist + '</p>'));
   }
-  var titlen = $("#title").text().length;
+  let titlen = $("#title").text().length;
   if (titlen > 17) {
     $("#title").replaceWith($('<marquee id="title">' + title + '</marquee>'));
   } else {
