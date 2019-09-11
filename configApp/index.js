@@ -120,7 +120,7 @@ http.get("/url", (req, res) => {
 })
 
 http.get("/plugin.html", (req, res) => {
-    res.sendFile(path.join("..", "plugin", "index.html"))
+    res.sendFile(path.join(__dirname, "..", "plugin", "index.html"))
 })
 
 http.get("/token", (req, res) => {
