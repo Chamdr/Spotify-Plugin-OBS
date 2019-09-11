@@ -11,7 +11,7 @@ const client_secret = "9ba17feecc2c4beb961a9a092fe60f48"
 
 const redirect_uri = "http://localhost:1764/callback"
 let http = express()
-http.use(express.static("public"))
+http.use(express.static("../public"))
 let state
 let win
 let refresh_token
