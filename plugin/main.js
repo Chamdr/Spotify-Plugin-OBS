@@ -2,14 +2,17 @@ let tilte;
 let oldTitle;//open plugin/config.json
 setInterval(() => {
   getSpotifyAccessToken(getSpotifyJson)
-
 }, 1 * 1000);
 
 
 function getSpotifyAccessToken(callback) {  
-  $.getJSON('config.json', function(data) {
-console.log(data)
-  })
+  $.ajax({
+    request: "GET",
+    url: 'http://localhost:1764/token',
+    success: function (responded) {
+      console.log(responded);
+      }
+  });
 }
 //send request to the Spotify API
 //get the responded Json
