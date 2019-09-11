@@ -5,9 +5,9 @@ const express = require("express")
 const path = require("path")
 const slash = require("slash")
 const fs = require("fs")
-const app = electron.app
+const appli = electron.app
 
-if (handleSquirrelEvent(app)) {
+if (handleSquirrelEvent(appli)) {
     // squirrel event handled and app will exit in 1000ms, so don't do anything else
     return;
 }
