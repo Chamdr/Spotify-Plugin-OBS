@@ -11,7 +11,7 @@ const client_secret = "9ba17feecc2c4beb961a9a092fe60f48"
 
 const redirect_uri = "http://localhost:1764/callback"
 let http = express()
-http.use(express.static("../public"))
+http.use(express.static("../plugin/public"))
 let state
 let win
 let refresh_token
@@ -37,7 +37,7 @@ function createWindow() {
             state: state,
             show_dialog: true
         }))
-    let tray = new Tray(path.join(__dirname, "..", "plugin", "image.png"))
+    let tray = new Tray(path.join(__dirname, "image.png"))
     const contextMenu = Menu.buildFromTemplate([
         {
             label: 'Show App', click: function () {
@@ -126,7 +126,9 @@ http.get("/plugin.html", (req, res) => {
 http.get("/token", (req, res) => {
     res.send(access_token)
 })
-
+http.get("/image.png", (req, res) => {
+    res.sendFile(path.join(__dirname, "image.png"))
+})
 setInterval(() => {
     if (refresh_token) {
         var authOptions = {
