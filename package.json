@@ -5,7 +5,7 @@
   "main": "configApp/index.js",
   "scripts": {
     "start": "electron .",
-    "build":"electron-packager . Spotify-Plugin-OBS --platform=win32 --arch=x64F"
+    "build":"electron-packager . Spotify-Plugin-OBS --platform=win32 --arch=x64"
   },
   "repository": {
     "type": "git",
