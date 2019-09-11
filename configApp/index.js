@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, Tray, Menu } = require('electron')
 const querystring = require('querystring')
 const request = require("request")
 const express = require("express")
@@ -14,6 +14,8 @@ let http = express()
 http.use(express.static("public"))
 let state
 let win
+let refresh_token
+let access_token
 
 function createWindow() {
     win = new BrowserWindow({
@@ -35,9 +37,35 @@ function createWindow() {
             state: state,
             show_dialog: true
         }))
+    let tray = new Tray(path.join(__dirname, "..", "plugin", "image.png"))
+    const contextMenu = Menu.buildFromTemplate([
+        {
+            label: 'Show App', click: function () {
+                win.show();
+            }
+        },
+        {
+            label: 'Quit', click: function () {
+                app.isQuiting = true;
+                app.quit();
+            }
+        }
+    ]);
 
-    win.on('closed', () => {
-        win = null
+    // Appelé à nouveau pour Linux car nous avons modifié le menu contextuel
+    tray.setContextMenu(contextMenu)
+
+    win.on('close', function (event) {
+        event.preventDefault();
+        win.hide();
+    });
+    win.on('minimize', function (event) {
+        event.preventDefault()
+        win.hide()
+    })
+
+    win.on('show', function () {
+        tray.setHighlightMode('always')
     })
 }
 
@@ -78,26 +106,51 @@ http.get('/callback', function (req, res) {
         request.post(authOptions, function (error, response, body) {
             if (!error && response.statusCode === 200) {
 
-                const access_token = body.access_token
-                const refresh_token = body.refresh_token
-                const url = slash(path.join(__dirname, "..", "plugin", "index.html"))
+                access_token = body.access_token
+                refresh_token = body.refresh_token
 
-                const obj = {
-                    url: url,
-                    refresh_token: refresh_token
-                }
-                fs.writeFile(path.join(__dirname, "..", "plugin", "config.json"), `data = '${JSON.stringify(obj)}'`, (err) => { if (err) console.error(err) })
                 res.sendFile(path.join(__dirname, "index.html"))
-            } else {
-                //handle error
             }
         });
     }
 });
 
 http.get("/url", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "plugin", "config.json"))
+    res.send(slash(path.join(__dirname, "..", "plugin", "index.html")))
 })
+
+http.get("/plugin.html", (req, res) => {
+    res.sendFile(path.join("..", "plugin", "index.html"))
+})
+
+http.get("/token", (req, res) => {
+    res.send(access_token)
+})
+
+setInterval(() => {
+    if (refresh_token) {
+        var authOptions = {
+            url: 'https://accounts.spotify.com/api/token',
+            headers: { 'Authorization': 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64')) },
+            form: {
+                grant_type: 'refresh_token',
+                refresh_token: refresh_token
+            },
+            json: true
+        };
+
+        request.post(authOptions, function (error, response, body) {
+            if (!error && response.statusCode === 200) {
+                const access_token = body.access_token;
+                const obj = {
+                    token: access_token
+                }
+                console.log(access_token)
+                fs.writeFile(path.join(__dirname, "..", "plugin", "config.json"), JSON.stringify(obj), (err) => { if (err) console.error(err) })
+            }
+        })
+    }
+}, 30 * 60 * 1000)
 
 console.log('Listening on 1764');
 http.listen(1764);

@@ -1,15 +1,16 @@
 let tilte;
-let oldTitle
-//open plugin/config.json
+let oldTitle;//open plugin/config.json
 setInterval(() => {
-  let jsondata = JSON.parse(data);
-  let token = jsondata.refresh_token;
-  let path = jsondata.url;
-  getSpotifyJson(token);
+  getSpotifyAccessToken(getSpotifyJson)
+
 }, 1 * 1000);
 
 
-
+function getSpotifyAccessToken(callback) {  
+  $.getJSON('config.json', function(data) {
+console.log(data)
+  })
+}
 //send request to the Spotify API
 //get the responded Json
 function getSpotifyJson(token) {
