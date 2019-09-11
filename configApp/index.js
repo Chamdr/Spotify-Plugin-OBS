@@ -24,6 +24,7 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: false
         },
+        icon: path.join(__dirname, "image.png"),
         autoHideMenuBar: true
     })
     const scope = "user-read-currently-playing"
