@@ -4,7 +4,8 @@
   "description": "Plugin OBS permettant d'afficher la musique jouée sur Spotify sur un live avec le logiciel OBS",
   "main": "configApp/index.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build":"electron-packager . Spotify-Plugin-OBS --platform=win32 --arch=x64F"
   },
   "repository": {
     "type": "git",
@@ -27,5 +28,8 @@
     "querystring": "^0.2.0",
     "request": "^2.88.0",
     "slash": "^3.0.0"
+  },
+  "devDependencies": {
+    "electron-packager": "^14.0.6"
   }
 }
