@@ -58,7 +58,7 @@ margin: 50px;
 
 <script>
     $.ajax("/url").then((data) => {
-        document.getElementById("urlbox").innerHTML = data.url
+        document.getElementById("urlbox").innerHTML = data
         console.log(data)
     })
     clipboard = new ClipboardJS('.btn')
