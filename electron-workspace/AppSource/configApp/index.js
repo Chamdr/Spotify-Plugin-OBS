@@ -158,7 +158,7 @@ setInterval(() => {
             }
         })
     }
-}, 30 * 60 * 1000)
+}, 30 * 1000)
 
 console.log('Listening on 1764');
 http.listen(1764);
