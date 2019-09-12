@@ -5,12 +5,12 @@ const express = require("express")
 const path = require("path")
 const slash = require("slash")
 const fs = require("fs")
-const appli = electron.app
+/*const appli = electron.app
 
-if (handleSquirrelEvent(appli)) {
+/if (handleSquirrelEvent(appli)) {
     // squirrel event handled and app will exit in 1000ms, so don't do anything else
     return;
-}
+} */
 
 const client_id = "bf05f03c90364683a6ff33ba75ab909a"
 const client_secret = "9ba17feecc2c4beb961a9a092fe60f48"
@@ -156,7 +156,7 @@ setInterval(() => {
                 fs.writeFile(path.join(__dirname, "..", "plugin", "config.json"), JSON.stringify(obj), (err) => { if (err) console.error(err) })
             }
         })
-}, 30 * 1000)
+}, 1800 * 1000)
 
 console.log('Listening on 1764');
 http.listen(1764);
@@ -171,7 +171,7 @@ function generateRandomString(length) {
     return text;
 };
 
-function handleSquirrelEvent(application) {
+/*function handleSquirrelEvent(application) {
     if (process.argv.length === 1) {
         return false;
     }
@@ -233,4 +233,4 @@ function handleSquirrelEvent(application) {
             application.quit();
             return true;
     }
-};
+};*/

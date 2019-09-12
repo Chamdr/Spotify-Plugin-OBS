@@ -7,8 +7,8 @@
     "start": "electron ."
   },
   "repository": {
-    "type": "git"
-    //"url": "git+https://github.com/DrakLulu/Spotify-Plugin-OBS.git"
+    "type": "git",
+    "url": "git+https://github.com/DrakLulu/Spotify-Plugin-OBS.git"
   },
   "keywords": [
     "obs",
@@ -18,11 +18,11 @@
   "author": "Fl0w & DrakLulu",
   "license": "MIT",
   "bugs": {
-    //"url": "https://github.com/DrakLulu/Spotify-Plugin-OBS/issues"
+    "url": "https://github.com/DrakLulu/Spotify-Plugin-OBS/issues"
   },
-  //"homepage": "https://github.com/DrakLulu/Spotify-Plugin-OBS#readme",
+  "homepage": "https://github.com/DrakLulu/Spotify-Plugin-OBS#readme",
   "dependencies": {
-    "electron": "^6.0.7",
+    "electron": "^6.0.9",
     "electron-squirrel-startup": "^1.0.0",
     "electron-winstaller": "^4.0.0",
     "express": "^4.17.1",

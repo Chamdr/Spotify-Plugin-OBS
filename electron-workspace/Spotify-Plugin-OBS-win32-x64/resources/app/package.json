@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/DrakLulu/Spotify-Plugin-OBS#readme",
   "dependencies": {
-    "electron": "^6.0.7",
+    "electron": "^6.0.9",
     "electron-squirrel-startup": "^1.0.0",
     "electron-winstaller": "^4.0.0",
     "express": "^4.17.1",
