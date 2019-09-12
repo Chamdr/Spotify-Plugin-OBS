@@ -136,7 +136,6 @@ http.get("/image.png", (req, res) => {
     res.sendFile(path.join(__dirname, "image.png"))
 })
 setInterval(() => {
-    if (refresh_token) {
         var authOptions = {
             url: 'https://accounts.spotify.com/api/token',
             headers: { 'Authorization': 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64')) },
@@ -157,7 +156,6 @@ setInterval(() => {
                 fs.writeFile(path.join(__dirname, "..", "plugin", "config.json"), JSON.stringify(obj), (err) => { if (err) console.error(err) })
             }
         })
-    }
 }, 30 * 1000)
 
 console.log('Listening on 1764');
