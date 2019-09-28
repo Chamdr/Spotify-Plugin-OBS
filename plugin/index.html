@@ -1,114 +1,137 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Spotify Plugin</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
-  </head>
-  <style>
-    body {
-      background-color: #363e61;
-      color: white;
-      font-family: 'Operator Mono';
-    }
 
-    #wrap{
-      width: 600px;
-      margin-left:30%;
-      margin-right:30%;
-      margin-top: 20%;
-    }
-    #image{
+<head>
+  <meta charset="UTF-8">
+  <title>Spotify Plugin</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
+</head>
+<style>
+  body {
+    background-color: #363e61;
+    color: white;
+    font-family: 'Operator Mono';
+  }
+
+  #wrap {
+    width: 600px;
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 20%;
+  }
+
+  #image {
     height: 80px;
     width: 80px;
-    float:left;
-    }
-    #title{
-      font-size: 30px;
-      float: left;
-      margin:0 0 0 1em;
-    }
-    #artist{
-      font-size: 30px;
-      float: left;
-      margin:0 0 0 1em;
-      font-style: italic;
-    }
-    marquee{
-      width: 50%;
-    }
- </style>
-  <body>
-    <div id="wrap">
-      <img id="image" src="image.png">
+    float: left;
+  }
+
+  #title {
+    font-size: 30px;
+    float: left;
+    margin: 0 0 0 1em;
+  }
+
+  #artist {
+    font-size: 30px;
+    float: left;
+    margin: 0 0 0 1em;
+    font-style: italic;
+  }
+
+  marquee {
+    width: 50%;
+  }
+</style>
+
+<body>
+  <div id="wrap">
+    <img id="image" src="image.png">
+    <div id="music">
       <p id="title"></p>
       <br>
       <br>
       <p id="artist"></p>
     </div>
-  </body>
-  <script>
-let tilte;
-let oldTitle;
-//open plugin/config.json
-setInterval(() => {
-  getSpotifyAccessToken(getSpotifyJson)
-}, 1 * 1000);
+
+  </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
+<script>
+  let tilte;
+  let oldTitle;
+  let ready;
+  let animation = anime({
+    targets: '#image',
+    rotate: 360,
+    keyframes: [
+      { borderRadius: "100%" },
+      { borderRadius: 0 }
+    ],
+    easing: 'easeInOutQuad'
+  })
+  //open plugin/config.json
+  setInterval(() => {
+    getSpotifyAccessToken(getSpotifyJson)
+  }, 1 * 1000);
 
 
-function getSpotifyAccessToken(callback){
-  $.ajax({
-    request: "GET",
-    url: 'http://localhost:1764/token',
-    success: function (responded) {
-     getSpotifyJson(responded);
-    }
-  });
-}
-//send request to the Spotify API
-//get the responded Json
-function getSpotifyJson(token){
-  $.ajax({
-    request: "GET",
-    url: 'https://api.spotify.com/v1/me/player/currently-playing',
-    headers: {
-      'Authorization': 'Bearer ' + token,
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    success: function (responded){
-      let i = "0";
-      let a = "2";
-      title = (responded.item.name);
-      if (title != oldTitle) {
-        let image = (responded.item.album.images[a].url);
-        let artist = (responded.item.artists[i].name);
-        //add featuring artist later?
-        oldTitle = title;
-        displayPlayedMusic(title, image, artist);
+  function getSpotifyAccessToken(callback) {
+    $.ajax({
+      request: "GET",
+      url: 'http://localhost:1764/token',
+      success: function (responded) {
+        getSpotifyJson(responded);
       }
-    }
-  });
-}
+    });
+  }
+  //send request to the Spotify API
+  //get the responded Json
+  function getSpotifyJson(token) {
+    $.ajax({
+      request: "GET",
+      url: 'https://api.spotify.com/v1/me/player/currently-playing',
+      headers: {
+        'Authorization': 'Bearer ' + token,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      success: function (responded) {
+        let i = "0";
+        let a = "2";
+        title = (responded.item.name);
+        if (title != oldTitle) {
+          let image = (responded.item.album.images[a].url);
+          let artist = (responded.item.artists[i].name);
+          //add featuring artist later?
+          oldTitle = title;
+          displayPlayedMusic(title, image, artist);
+        }
+      }
+    });
+  }
 
-//display name, artist and image on the htlm page
-function displayPlayedMusic(title, image, artist){
-  $("#artist").text(artist);
-  $("#title").text(title);
-  $("#image").attr("src", image);
-  let artlen = $("#artist").text().length;
-  if (artlen > 20) {
-    $("#artist").replaceWith($('<marquee id="artist">' + artist + '</marquee>'));
-  } else {
-    $("#artist").replaceWith($('<p id="artist">' + artist + '</p>'));
+  //display name, artist and image on the html page
+  function displayPlayedMusic(title, image, artist) {
+    animation.restart()
+    $("#image").attr("src", image);
+    $("#artist").text(artist);
+    $("#title").text(title);
+    let artlen = $("#artist").text().length;
+    if (artlen > 20) {
+      $("#artist").replaceWith($('<marquee id="artist">' + artist + '</marquee>'));
+    } else {
+      $("#artist").replaceWith($('<p id="artist">' + artist + '</p>'));
+    }
+    let titlen = $("#title").text().length;
+    if (titlen > 20) {
+      $("#title").replaceWith($('<marquee id="title">' + title + '</marquee>'));
+    } else {
+      $("#title").replaceWith($('<p id="title">' + title + '</p>'));
+    }
+
   }
-  let titlen = $("#title").text().length;
-  if (titlen > 20) {
-    $("#title").replaceWith($('<marquee id="title">' + title + '</marquee>'));
-  } else {
-    $("#title").replaceWith($('<p id="title">' + title + '</p>'));
-  }
-}
-  </script>
+</script>
+
 </html>
