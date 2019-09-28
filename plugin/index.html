@@ -59,8 +59,6 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
 <script>
-  let tilte;
-  let oldTitle;
   let ready;
   let animation = anime({
     targets: '#image',
@@ -101,11 +99,10 @@
         let i = "0";
         let a = "2";
         title = (responded.item.name);
-        if (title != oldTitle) {
+        if (title != $("#title")[0].innerHTML) {
           let image = (responded.item.album.images[a].url);
           let artist = (responded.item.artists[i].name);
           //add featuring artist later?
-          oldTitle = title;
           displayPlayedMusic(title, image, artist);
         }
       }
@@ -115,6 +112,7 @@
   //display name, artist and image on the html page
   function displayPlayedMusic(title, image, artist) {
     animation.restart()
+    console.log()
     $("#image").attr("src", image);
     $("#artist").text(artist);
     $("#title").text(title);
