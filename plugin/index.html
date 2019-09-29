@@ -60,7 +60,7 @@
 <script src="https://cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
 <script>
   let ready;
-  let animation = anime({
+  /* let animation = anime({
     targets: '#image',
     rotate: 360,
     keyframes: [
@@ -68,8 +68,8 @@
       { borderRadius: 0 }
     ],
     easing: 'easeInOutQuad'
-  })
-  //open plugin/config.json
+  }) */
+
   setInterval(() => {
     getSpotifyAccessToken(getSpotifyJson)
   }, 1 * 1000);
@@ -111,8 +111,8 @@
 
   //display name, artist and image on the html page
   function displayPlayedMusic(title, image, artist) {
-    animation.restart()
-    console.log()
+   // animation.restart()
+
     $("#image").attr("src", image);
     $("#artist").text(artist);
     $("#title").text(title);
