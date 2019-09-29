@@ -5,7 +5,7 @@
   "main": "configApp/index.js",
   "scripts": {
     "start": "electron .",
-    "build":"electron-packager . Spotify-Plugin-OBS --platform=win32 --arch=x64 --overwrite --prune=true"
+    "build": "node build.js"
   },
   "repository": {
     "type": "git",
@@ -23,13 +23,14 @@
   },
   "homepage": "https://github.com/DrakLulu/Spotify-Plugin-OBS#readme",
   "dependencies": {
-    "electron": "^6.0.7",
     "express": "^4.17.1",
     "querystring": "^0.2.0",
     "request": "^2.88.0",
     "slash": "^3.0.0"
   },
   "devDependencies": {
+    "electron": "^6.0.7",
+    "archiver": "^3.1.1",
     "electron-packager": "^14.0.6"
   }
 }
