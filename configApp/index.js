@@ -24,7 +24,7 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: false
         },
-        icon: path.join(__dirname, "image.png"),
+        icon: path.join(__dirname, "icon.png"),
         autoHideMenuBar: true
     })
     const scope = "user-read-currently-playing"
@@ -38,7 +38,7 @@ function createWindow() {
             state: state,
             show_dialog: true
         }))
-    let tray = new Tray(path.join(__dirname, "image.png"))
+    let tray = new Tray(path.join(__dirname, "icon.png"))
     const contextMenu = Menu.buildFromTemplate([
         {
             label: 'Show App', click: function () {
