@@ -128,8 +128,8 @@ http.get("/plugin.html", (req, res) => {
 http.get("/token", (req, res) => {
     res.send(access_token)
 })
-http.get("/image.png", (req, res) => {
-    res.sendFile(path.join(__dirname, "image.png"))
+http.get("/icon.png", (req, res) => {
+    res.sendFile(path.join(__dirname, "icon.png"))
 })
 setInterval(() => {
     if (refresh_token) {
