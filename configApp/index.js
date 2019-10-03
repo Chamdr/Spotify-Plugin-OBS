@@ -2,14 +2,16 @@ const { app, BrowserWindow, Tray, Menu } = require('electron')
 const querystring = require('querystring')
 const request = require("request")
 const express = require("express")
-const path = require("path")
 const slash = require("slash")
+const path = require("path")
 const fs = require("fs")
 
 const client_id = "bf05f03c90364683a6ff33ba75ab909a"
 const client_secret = "9ba17feecc2c4beb961a9a092fe60f48"
+const version = "1.2"
 
 const redirect_uri = "http://localhost:1764/callback"
+
 let http = express()
 http.use(express.static("../plugin/public"))
 let state
@@ -26,6 +28,26 @@ function createWindow() {
         },
         icon: path.join(__dirname, "icon.png"),
         autoHideMenuBar: true
+    })
+    request("https://api.github.com/repos/DrakLulu/Spotify-Plugin-OBS/releases/latest", {
+        headers: {
+            "User-Agent": "Spotify-Plugin-OBS"
+        }
+    }, (error, response, body) => {
+        body = JSON.parse(body)
+        releaseVersion = body.tag_name.slice(1)
+console.log(releaseVersion)
+        if (version !== releaseVersion) {
+            new BrowserWindow({
+                width: 450,
+                height: 200,
+                webPreferences: {
+                    nodeIntegration: true
+                },
+                icon: path.join(__dirname, "icon.png"),
+                autoHideMenuBar: true
+            }).loadFile(path.join(__dirname, "update.html"))
+        }
     })
     const scope = "user-read-currently-playing"
     state = generateRandomString(16)
@@ -71,7 +93,9 @@ function createWindow() {
     })
 }
 
-app.on('ready', createWindow)
+app.on('ready', () => {
+    createWindow()
+})
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        body {
+            background-color: white;
+            color: #363e61;
+            font-family: 'Operator Mono';
+        }
+    </style>
+</head>
+
+<body>
+    <center>
+        <h1>
+            Une mise a jour est disponible
+            <br>
+            <a id="link" href="#z">Lien</a>
+        </h1>
+    </center>
+</body>
+
+<script>
+    document.getElementById("link").addEventListener("click", () => {
+       require("electron").shell.openExternal("https://github.com/DrakLulu/Spotify-Plugin-OBS/releases/latest")
+    })
+</script>
+
+</html>
