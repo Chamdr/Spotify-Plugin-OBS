@@ -11,13 +11,14 @@ packager({
     arch: "x64",
     prune: true,
     overwrite: true,
-    icon: "icon.ico"
+    icon: "icon.ico",
+    ignore: ["Output", "out","build.js","buildSetup.iss"]
 }).then((path) => {
     path = path[0]
     const archive = archiver('zip', { zlib: { level: 9 } });
     const stream = fs.createWriteStream(path + ".zip");
     archive
-        .directory(path, false)
+        .directory(path, "Spotify-Plugin-OBS-win32-x64")
         .pipe(stream)
     archive.finalize();
 })
