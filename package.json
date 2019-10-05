@@ -25,6 +25,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "querystring": "^0.2.0",
+    "rage-edit": "^1.2.0",
     "request": "^2.88.0",
     "slash": "^3.0.0",
     "sudo-prompt": "^9.0.0",

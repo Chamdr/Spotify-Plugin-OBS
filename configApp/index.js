@@ -1,4 +1,5 @@
 const { app, BrowserWindow, Tray, Menu } = require('electron')
+const Registry = require('rage-edit').Registry
 const querystring = require('querystring')
 const request = require("request")
 const express = require("express")
@@ -36,7 +37,7 @@ function createWindow() {
     }, (error, response, body) => {
         body = JSON.parse(body)
         releaseVersion = body.tag_name.slice(1)
-console.log(releaseVersion)
+        console.log(releaseVersion)
         if (version !== releaseVersion) {
             new BrowserWindow({
                 width: 450,
@@ -63,12 +64,27 @@ console.log(releaseVersion)
     let tray = new Tray(path.join(__dirname, "icon.png"))
     const contextMenu = Menu.buildFromTemplate([
         {
-            label: 'Show App', click: function () {
+            label: 'Show App',
+            click: function () {
                 win.show();
             }
         },
         {
-            label: 'Quit', click: function () {
+            label: "Démarrer automatiquement",
+            type: "checkbox",
+            click: function () {
+                Registry.get("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "SpotifyPluginObs").then((result) => {
+                    if (result === undefined) {
+                        Registry.set("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "SpotifyPluginObs", path.join(__dirname, "..", "..", "..", "Spotify-Plugin-OBS.exe"))
+                    } else {
+                        Registry.delete("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "SpotifyPluginObs")
+                    }
+                })
+            }
+        },
+        {
+            label: 'Quit',
+            click: function () {
                 app.isQuiting = true;
                 app.quit();
                 app.exit()
@@ -76,7 +92,10 @@ console.log(releaseVersion)
         }
     ]);
 
-    // Appelé à nouveau pour Linux car nous avons modifié le menu contextuel
+    Registry.get("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "SpotifyPluginObs").then((result) => {
+        const value = result !== undefined
+        contextMenu.items[1].checked = value ? true : false
+    })
     tray.setContextMenu(contextMenu)
 
     win.on('close', function (event) {
