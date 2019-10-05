@@ -37,7 +37,6 @@ function createWindow() {
     }, (error, response, body) => {
         body = JSON.parse(body)
         releaseVersion = body.tag_name.slice(1)
-        console.log(releaseVersion)
         if (version !== releaseVersion) {
             new BrowserWindow({
                 width: 450,
