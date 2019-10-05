@@ -12,7 +12,7 @@ packager({
     prune: true,
     overwrite: true,
     icon: "icon.ico",
-    ignore: ["Output", "out","build.js","buildSetup.iss"]
+    ignore: ["Output", "out","build.js","setup.iss"]
 }).then((path) => {
     path = path[0]
     const archive = archiver('zip', { zlib: { level: 9 } });
