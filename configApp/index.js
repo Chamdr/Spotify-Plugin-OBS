@@ -25,7 +25,7 @@ function createWindow() {
         width: 600,
         height: 800,
         webPreferences: {
-            nodeIntegration: false
+            nodeIntegration: true
         },
         icon: path.join(__dirname, "icon.png"),
         autoHideMenuBar: true
