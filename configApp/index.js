@@ -1,15 +1,18 @@
 const { app, BrowserWindow, Tray, Menu } = require('electron')
+const Registry = require('rage-edit').Registry
 const querystring = require('querystring')
 const request = require("request")
 const express = require("express")
-const path = require("path")
 const slash = require("slash")
+const path = require("path")
 const fs = require("fs")
 
 const client_id = "bf05f03c90364683a6ff33ba75ab909a"
 const client_secret = "9ba17feecc2c4beb961a9a092fe60f48"
+const version = "1.2"
 
 const redirect_uri = "http://localhost:1764/callback"
+
 let http = express()
 http.use(express.static("../plugin/public"))
 let state
@@ -24,8 +27,27 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: false
         },
-        icon: path.join(__dirname, "image.png"),
+        icon: path.join(__dirname, "icon.png"),
         autoHideMenuBar: true
+    })
+    request("https://api.github.com/repos/DrakLulu/Spotify-Plugin-OBS/releases/latest", {
+        headers: {
+            "User-Agent": "Spotify-Plugin-OBS"
+        }
+    }, (error, response, body) => {
+        body = JSON.parse(body)
+        releaseVersion = body.tag_name.slice(1)
+        if (version !== releaseVersion) {
+            new BrowserWindow({
+                width: 450,
+                height: 200,
+                webPreferences: {
+                    nodeIntegration: true
+                },
+                icon: path.join(__dirname, "icon.png"),
+                autoHideMenuBar: true
+            }).loadFile(path.join(__dirname, "update.html"))
+        }
     })
     const scope = "user-read-currently-playing"
     state = generateRandomString(16)
@@ -38,15 +60,30 @@ function createWindow() {
             state: state,
             show_dialog: true
         }))
-    let tray = new Tray(path.join(__dirname, "image.png"))
+    let tray = new Tray(path.join(__dirname, "icon.png"))
     const contextMenu = Menu.buildFromTemplate([
         {
-            label: 'Show App', click: function () {
+            label: 'Show App',
+            click: function () {
                 win.show();
             }
         },
         {
-            label: 'Quit', click: function () {
+            label: "Démarrer automatiquement",
+            type: "checkbox",
+            click: function () {
+                Registry.get("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "SpotifyPluginObs").then((result) => {
+                    if (result === undefined) {
+                        Registry.set("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "SpotifyPluginObs", path.join(__dirname, "..", "..", "..", "Spotify-Plugin-OBS.exe"))
+                    } else {
+                        Registry.delete("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "SpotifyPluginObs")
+                    }
+                })
+            }
+        },
+        {
+            label: 'Quit',
+            click: function () {
                 app.isQuiting = true;
                 app.quit();
                 app.exit()
@@ -54,7 +91,10 @@ function createWindow() {
         }
     ]);
 
-    // Appelé à nouveau pour Linux car nous avons modifié le menu contextuel
+    Registry.get("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "SpotifyPluginObs").then((result) => {
+        const value = result !== undefined
+        contextMenu.items[1].checked = value ? true : false
+    })
     tray.setContextMenu(contextMenu)
 
     win.on('close', function (event) {
@@ -71,7 +111,9 @@ function createWindow() {
     })
 }
 
-app.on('ready', createWindow)
+app.on('ready', () => {
+    createWindow()
+})
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
@@ -107,9 +149,10 @@ http.get('/callback', function (req, res) {
 
         request.post(authOptions, function (error, response, body) {
             if (!error && response.statusCode === 200) {
-
+                console.log(access_token + "BEFORE");
                 access_token = body.access_token
                 refresh_token = body.refresh_token
+                console.log(access_token+ "AFTER");
 
                 res.sendFile(path.join(__dirname, "index.html"))
             }
@@ -128,11 +171,10 @@ http.get("/plugin.html", (req, res) => {
 http.get("/token", (req, res) => {
     res.send(access_token)
 })
-http.get("/image.png", (req, res) => {
-    res.sendFile(path.join(__dirname, "image.png"))
+http.get("/icon.png", (req, res) => {
+    res.sendFile(path.join(__dirname, "icon.png"))
 })
 setInterval(() => {
-    if (refresh_token) {
         var authOptions = {
             url: 'https://accounts.spotify.com/api/token',
             headers: { 'Authorization': 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64')) },
@@ -145,11 +187,17 @@ setInterval(() => {
 
         request.post(authOptions, function (error, response, body) {
             if (!error && response.statusCode === 200) {
-                access_token = body.access_token;
+                const access_token = body.access_token;
+                const obj = {
+                    token: access_token
+                }
+                console.log(access_token)
+                fs.writeFile(path.join(__dirname, "..", "plugin", "config.json"), JSON.stringify(obj), (err) => { if (err) console.error(err) })
+            }else{
+                console.log("problemes!")
             }
         })
-    }
-}, 60 * 30 * 1000)
+}, 30 * 60 * 1000)
 
 console.log('Listening on 1764');
 http.listen(1764);
