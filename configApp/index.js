@@ -187,12 +187,7 @@ setInterval(() => {
 
         request.post(authOptions, function (error, response, body) {
             if (!error && response.statusCode === 200) {
-                const access_token = body.access_token;
-                const obj = {
-                    token: access_token
-                }
-                console.log(access_token)
-                fs.writeFile(path.join(__dirname, "..", "plugin", "config.json"), JSON.stringify(obj), (err) => { if (err) console.error(err) })
+                 access_token = body.access_token
             }
         })
     }
