@@ -25,7 +25,7 @@ function createWindow() {
         width: 600,
         height: 800,
         webPreferences: {
-            nodeIntegration: false
+            nodeIntegration: true
         },
         icon: path.join(__dirname, "icon.png"),
         autoHideMenuBar: true
@@ -149,10 +149,9 @@ http.get('/callback', function (req, res) {
 
         request.post(authOptions, function (error, response, body) {
             if (!error && response.statusCode === 200) {
-                console.log(access_token + "BEFORE");
+
                 access_token = body.access_token
                 refresh_token = body.refresh_token
-                console.log(access_token+ "AFTER");
 
                 res.sendFile(path.join(__dirname, "index.html"))
             }
@@ -175,6 +174,7 @@ http.get("/icon.png", (req, res) => {
     res.sendFile(path.join(__dirname, "icon.png"))
 })
 setInterval(() => {
+    if (refresh_token) {
         var authOptions = {
             url: 'https://accounts.spotify.com/api/token',
             headers: { 'Authorization': 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64')) },
@@ -187,16 +187,10 @@ setInterval(() => {
 
         request.post(authOptions, function (error, response, body) {
             if (!error && response.statusCode === 200) {
-                const access_token = body.access_token;
-                const obj = {
-                    token: access_token
-                }
-                console.log(access_token)
-                fs.writeFile(path.join(__dirname, "..", "plugin", "config.json"), JSON.stringify(obj), (err) => { if (err) console.error(err) })
-            }else{
-                console.log("problemes!")
+                 access_token = body.access_token
             }
         })
+    }
 }, 30 * 60 * 1000)
 
 console.log('Listening on 1764');

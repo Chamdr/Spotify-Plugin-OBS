@@ -60,7 +60,6 @@
 <script src="https://cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
 <script>
   let ready;
-  let oldtitle;
   /* let animation = anime({
     targets: '#image',
     rotate: 360,
@@ -100,13 +99,12 @@
         let i = "0";
         let a = "2";
         title = (responded.item.name);
-        if (title != oldtitle) {
+        if (title != $("#title")[0].innerHTML) {
           let image = (responded.item.album.images[a].url);
           let artist = (responded.item.artists[i].name);
           //add featuring artist later?
           displayPlayedMusic(title, image, artist);
         }
-        oldtitle = title;
       }
     });
   }
