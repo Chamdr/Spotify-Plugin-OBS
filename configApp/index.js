@@ -9,7 +9,7 @@ const fs = require("fs")
 
 const client_id = "bf05f03c90364683a6ff33ba75ab909a"
 const client_secret = "9ba17feecc2c4beb961a9a092fe60f48"
-const version = "1.2.1"
+const version = "1.2.3"
 
 const redirect_uri = "http://localhost:1764/callback"
 

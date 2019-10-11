@@ -4,7 +4,7 @@ const request = require("request")
 const wget = require("node-wget")
 const path = require("path")
 const fs = require("fs")
-const version = "v1.2"
+const version = "v1.2.3"
 
 request("https://api.github.com/repos/DrakLulu/Spotify-Plugin-OBS/releases/latest", {
     headers: {
