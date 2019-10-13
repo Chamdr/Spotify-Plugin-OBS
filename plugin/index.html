@@ -59,6 +59,8 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
 <script>
+      let oldtitle;
+
   /* let animation = anime({
     targets: '#image',
     rotate: 360,
@@ -127,7 +129,7 @@
     } else {
       $("#title").replaceWith($('<p id="title">' + title + '</p>'));
     }
-
+    oldtitle = title;
   }
 </script>
 
