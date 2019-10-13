@@ -1,0 +1,63 @@
+body {
+    margin-top: 2%;
+    margin-left: 1%;
+    margin-right: 2%;
+}
+
+#accountIMG {
+    width: 128px;
+    height: 128px;
+    float: left;
+    border-radius: 10px;
+}
+
+#name {
+    margin-left: 2%;
+    float: left;
+}
+
+#btn-account {
+    position: absolute;
+    left: 155px;
+    top: 45px;
+}
+
+#btn-disconnect {
+    position: absolute;
+    left: 155px;
+    top: 90px;
+}
+
+.wrap {
+    padding: 10px 10px 0 10px;
+    width: 50%;
+    margin-bottom: 50px;
+}
+
+.image {
+    height: 80px;
+    width: 80px;
+    float: left;
+}
+
+.title {
+    font-size: 30px;
+}
+
+.music {
+    margin-left: 100px;
+}
+
+.artist {
+    font-size: 30px;
+    font-style: italic;
+    margin: -20px 0 20px 0;
+}
+
+#v-pills-animation {
+    font-family: 'Operator Mono';
+}
+
+#wrap-fade-animation .image {
+    opacity: 0;
+}

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Settings</title>
+
+    <script>let $ = require('jquery');</script>
+    <script>require('popper.js');</script>
+    <script>require('bootstrap');</script>
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-3">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+                <a class="nav-link active" id="v-pills-account-tab" data-toggle="pill" href="#v-pills-account"
+                    role="tab" aria-controls="v-pills-account" aria-selected="true">Compte</a>
+                <a class="nav-link" id="v-pills-animation-tab" data-toggle="pill" href="#v-pills-animation" role="tab"
+                    aria-controls="v-pills-animation" aria-selected="false">Animation</a>
+                <a class="nav-link" id="v-pills-windows-tab" data-toggle="pill" href="#v-pills-windows" role="tab"
+                    aria-controls="v-pills-windows" aria-selected="false">Demarrage</a>
+            </div>
+        </div>
+        <div class="col-9">
+            <div class="tab-content" id="v-pills-tabContent">
+
+                <div class="tab-pane fade show active" id="v-pills-account" role="tabpanel"
+                    aria-labelledby="v-pills-account-tab">
+                    <img id="accountIMG" src="icon.png">
+                    <h3 id="name"></h3>
+                    </br>
+                    <button class="btn btn-outline-success" id="btn-account">
+                        Parametre du compte
+                    </button>
+                    <button class="btn btn-outline-danger" id="btn-disconnect">
+                        Déconnection
+                    </button>
+                </div>
+
+                <div class="tab-pane fade" id="v-pills-animation" role="tabpanel"
+                    aria-labelledby="v-pills-animation-tab">
+
+                    <div class="wrap rounded" id="wrap-no-animation">
+                        <img class="image" src="icon.png">
+                        <div class="music">
+                            <p class="title"></p>
+                            <p class="artist"></p>
+                        </div>
+                    </div>
+
+                    <div class="wrap rounded" id="wrap-round-animation">
+                        <img class="image" src="icon.png">
+                        <div class="music">
+                            <p class="title"></p>
+                            <p class="artist"></p>
+                        </div>
+
+                    </div>
+                    <div class="wrap rounded" id="wrap-fade-animation">
+                        <img class="image" src="icon.png">
+                        <div class="music">
+                            <p class="title"></p>
+                            <p class="artist"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-windows" role="tabpanel" aria-labelledby="v-pills-windows-tab">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Nulla fringilla lacinia commodo. Proin scelerisque
+                    libero in turpis vestibulum tempor. Cras sodales ligula
+                    eros, at convallis nibh accumsan ac. Proin ut nisl
+                    ullamcorper, tempor mauris eget, mattis turpis. Etiam
+                    luctus id dui quis semper. Phasellus lobortis leo
+                    interdum efficitur suscipit. Morbi eu nibh maximus diam
+                    efficitur efficitur. Donec id lacus tortor. Etiam mollis
+                    elit in dui auctor tincidunt. Vestibulum lobortis lorem
+                    sem, laoreet bibendum felis rhoncus eu. Quisque feugiat
+                    bibendum odio, ac semper metus vestibulum id.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let oldTitle
+        setInterval(
+            anime({
+                targets: '#wrap-round-animation img',
+                rotate: 360,
+                keyframes: [
+                    { borderRadius: "100%" },
+                    { borderRadius: 0 }
+                ],
+                easing: 'easeInOutQuad'
+            }).restart, 2000)
+
+        setInterval(anime({
+            targets: '#wrap-fade-animation img',
+            opacity: 1,
+            easing: 'easeInOutQuad'
+        }).restart, 2000)
+
+        function updateRessources() {
+            $.ajax({
+                request: "GET",
+                url: 'http://localhost:1764/token',
+                success: function (responded) {
+                    let token = responded
+                    $.ajax({
+                        request: "GET",
+                        url: 'https://api.spotify.com/v1/me/player/currently-playing',
+                        headers: {
+                            'Authorization': 'Bearer ' + token,
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        success: function (responded) {
+                            let i = "0";
+                            let a = "2";
+                            if (responded) {
+                                title = (responded.item.name);
+                                let image = (responded.item.album.images[a].url);
+                                let artist = (responded.item.artists[i].name);
+                                if (title != oldTitle) {
+                                    oldTitle = title
+
+                                    $(".image").attr("src", image);
+                                    $(".artist").text(artist);
+                                    $(".title").text(title);
+                                    let artlen = $(".artist").text().length;
+                                    if (artlen > 20) {
+                                        $(".artist").replaceWith($('<marquee class="artist">' + artist + '</marquee>'));
+                                    } else {
+                                        $(".artist").replaceWith($('<p class="artist">' + artist + '</p>'));
+                                    }
+                                    let titlen = $(".title").text().length;
+                                    if (titlen > 20) {
+                                        $(".title").replaceWith($('<marquee class="title">' + title + '</marquee>'));
+                                    } else {
+                                        $(".title").replaceWith($('<p class="title">' + title + '</p>'));
+                                    }
+                                }
+                            }
+                            $.ajax({
+                                request: "GET",
+                                url: "https://api.spotify.com/v1/me",
+                                headers: {
+                                    'Authorization': 'Bearer ' + token,
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json',
+                                },
+                                success: function (responded) {
+                                    let username = responded.display_name
+                                    let userimg = responded.images[0].url
+                                    $("#accountIMG").attr("src", userimg)
+                                    $("#name").text(`${username}`)
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+        }
+        setInterval(updateRessources, 1000)
+        updateRessources()
+        document.getElementById("btn-account").addEventListener("click", () => {
+            require("electron").shell.openExternal("https://www.spotify.com/redirect/account-page")
+        })
+        const ipc = require('electron').ipcRenderer
+        document.getElementById("btn-disconnect").addEventListener("click", () => {
+            ipc.sendSync("disconnect")
+            require('electron').remote.getCurrentWindow().close()
+        })
+        
+        $("#wrap-no-animation").addClass("border border-success")
+        //$("#wrap-round-animation").addClass("border border-success")
+        //$("#wrap-fade-animation").addClass("border border-success")
+        
+        $(document).ready(
+            function () {
+                $(".wrap").click(
+                    function (event) {
+
+                        $(this).addClass("border border-success").siblings().removeClass("border border-success");
+                    }
+                );
+            });
+    </script>
+</body>
+
+</html>

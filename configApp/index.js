@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, Menu } = require('electron')
+const { app, BrowserWindow, Tray, Menu, ipcMain, session, globalShortcut } = require('electron')
 const Registry = require('rage-edit').Registry
 const querystring = require('querystring')
 const request = require("request")
@@ -9,7 +9,7 @@ const fs = require("fs")
 
 const client_id = "bf05f03c90364683a6ff33ba75ab909a"
 const client_secret = "9ba17feecc2c4beb961a9a092fe60f48"
-const version = "1.2.1"
+const version = "1.2.3"
 
 const redirect_uri = "http://localhost:1764/callback"
 
@@ -27,8 +27,9 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: true
         },
+        show: false,
         icon: path.join(__dirname, "icon.png"),
-        autoHideMenuBar: true
+        //   autoHideMenuBar: true
     })
     request("https://api.github.com/repos/DrakLulu/Spotify-Plugin-OBS/releases/latest", {
         headers: {
@@ -58,14 +59,60 @@ function createWindow() {
             scope: scope,
             redirect_uri: redirect_uri,
             state: state,
-            show_dialog: true
+            show_dialog: false
         }))
+
+    ipcMain.on("disconnect", (event, args) => {
+        session.defaultSession.cookies.get({}, (error, cookies) => {
+            cookies.forEach((cookie) => {
+                let url = '';
+                // get prefix, like https://www.
+                url += cookie.secure ? 'https://' : 'http://';
+                url += cookie.domain.charAt(0) === '.' ? 'www' : '';
+                // append domain and path
+                url += cookie.domain;
+                url += cookie.path;
+
+                session.defaultSession.cookies.remove(url, cookie.name, (error) => {
+                    if (error) console.log(`error removing cookie ${cookie.name}`, error);
+                });
+            });
+            win.loadURL('https://accounts.spotify.com/authorize?' +
+                querystring.stringify({
+                    response_type: 'code',
+                    client_id: client_id,
+                    scope: scope,
+                    redirect_uri: redirect_uri,
+                    state: state,
+                    show_dialog: true
+                }))
+        });
+
+        access_token = undefined
+        refresh_token = undefined
+
+        event.returnValue = true
+    })
     let tray = new Tray(path.join(__dirname, "icon.png"))
     const contextMenu = Menu.buildFromTemplate([
         {
             label: 'Show App',
             click: function () {
                 win.show();
+            }
+        },
+        {
+            label: "Settings",
+            click: function () {
+                new BrowserWindow({
+                    width: 900,
+                    height: 700,
+                    webPreferences: {
+                        nodeIntegration: true
+                    },
+                    icon: path.join(__dirname, "icon.png"),
+                    autoHideMenuBar: true
+                }).loadFile(path.join(__dirname, "settings.html"))
             }
         },
         {
@@ -108,6 +155,49 @@ function createWindow() {
 
     win.on('show', function () {
         tray.setHighlightMode('always')
+    })
+    win.once('ready-to-show', () => {
+        Menu.setApplicationMenu(Menu.buildFromTemplate([
+            {
+                label: "File",
+                submenu: [
+                    {
+                        label: "Settings",
+                        click: function () {
+                            brow = new BrowserWindow({
+                                width: 900,
+                                height: 700,
+                                webPreferences: {
+                                    nodeIntegration: true
+                                },
+                                icon: path.join(__dirname, "icon.png"),
+                                autoHideMenuBar: true
+                            })
+                            brow.loadFile(path.join(__dirname, "settings.html"))
+
+                            /* globalShortcut.register('f5', function () {
+                                brow.reload()
+                            })
+                            globalShortcut.register('f6', function () {
+                                brow.webContents.openDevTools()
+                            }) */
+                        }
+                    },
+                    { role: "quit" }
+                ]
+            },
+            {
+                label: 'Edit',
+                submenu: [
+                    { role: 'cut' },
+                    { role: 'copy' },
+                    { role: 'paste' },
+                    { role: 'selectall' }
+                ]
+            }
+
+        ]))
+        win.show()
     })
 }
 
@@ -187,7 +277,7 @@ setInterval(() => {
 
         request.post(authOptions, function (error, response, body) {
             if (!error && response.statusCode === 200) {
-                 access_token = body.access_token
+                access_token = body.access_token
             }
         })
     }
