@@ -30,7 +30,7 @@ body {
 
 .wrap {
     padding: 10px 10px 0 10px;
-    width: 50%;
+    width: 600px;
     margin-bottom: 50px;
 }
 
@@ -53,11 +53,16 @@ body {
     font-style: italic;
     margin: -20px 0 20px 0;
 }
-
+.radio-border{
+    border: 1px solid #222;
+}
 #v-pills-animation {
     font-family: 'Operator Mono';
 }
 
 #wrap-fade-animation .image {
     opacity: 0;
+}
+.pretty{
+    font-size:30px
 }
