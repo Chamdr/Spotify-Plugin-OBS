@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/switch.css">
+    <title>Settings</title>
+
+    <script>let $ = require('jquery');</script>
+    <script>require('popper.js');</script>
+    <script>require('bootstrap');</script>
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-3">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+                <a class="nav-link active" id="v-pills-account-tab" data-toggle="pill" href="#v-pills-account"
+                    role="tab" aria-controls="v-pills-account" aria-selected="true">Compte</a>
+                <a class="nav-link" id="v-pills-animation-tab" data-toggle="pill" href="#v-pills-animation" role="tab"
+                    aria-controls="v-pills-animation" aria-selected="false">Animation</a>
+                <a class="nav-link" id="v-pills-windows-tab" data-toggle="pill" href="#v-pills-windows" role="tab"
+                    aria-controls="v-pills-windows" aria-selected="false">Demarrage</a>
+            </div>
+        </div>
+        <div class="col-9">
+            <div class="tab-content" id="v-pills-tabContent">
+
+                <div class="tab-pane fade show active" id="v-pills-account" role="tabpanel"
+                    aria-labelledby="v-pills-account-tab">
+                    <img id="accountIMG" src="../icon.png">
+                    <h3 id="name"></h3>
+                    </br>
+                    <button class="btn btn-outline-success" id="btn-account">
+                        Parametre du compte
+                    </button>
+                    <button class="btn btn-outline-danger" id="btn-disconnect">
+                        Déconnection
+                    </button>
+                </div>
+
+                <div class="tab-pane fade " id="v-pills-animation" role="tabpanel"
+                    aria-labelledby="v-pills-animation-tab">
+
+                    <div class="wrap rounded radio-border" id="wrap-no-animation">
+                        <img class="image" src="../icon.png">
+                        <div class="music">
+                            <p class="title">Musique title</p>
+                            <p class="artist">Artist name</p>
+                        </div>
+                    </div>
+
+                    <div class="wrap rounded radio-border" id="wrap-round-animation">
+                        <img class="image" src="../icon.png">
+                        <div class="music">
+                            <p class="title">Musique title</p>
+                            <p class="artist">Artist name</p>
+                        </div>
+
+                    </div>
+                    <div class="wrap rounded radio-border" id="wrap-fade-animation">
+                        <img class="image" src="../icon.png">
+                        <div class="music">
+                            <p class="title">Musique title</p>
+                            <p class="artist">Artist name</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade " id="v-pills-windows" role="tabpanel" aria-labelledby="v-pills-windows-tab">
+
+                    <label class="label">
+                        <div class="toggle">
+                          <input class="toggle-state" type="checkbox" name="check" value="check" />
+                          <div class="toggle-inner">
+                             <div class="indicator"></div>
+                          </div>
+                          <div class="active-bg"></div>
+                        </div>
+                        <div class="label-text">Démarrer automatiquement</div>
+                      </label>                      
+
+                      <br/>
+                      <label class="label">
+                        <div class="toggle">
+                          <input class="toggle-state" type="checkbox" name="check" value="check" />
+                          <div class="toggle-inner">
+                             <div class="indicator"></div>
+                          </div>
+                          <div class="active-bg"></div>
+                        </div>
+                        <div class="label-text">Minimiser dans la barre de tâches</div>
+                      </label>  
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="configWindow.js"></script>
+</body>
+
+</html>
