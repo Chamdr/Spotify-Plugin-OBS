@@ -31,6 +31,7 @@ function updateRessources() {
                     'Content-Type': 'application/json',
                 },
                 success: function (responded) {
+                    console.log(responded)
                     let i = "0";
                     let a = "2";
                     if (responded) {

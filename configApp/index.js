@@ -9,7 +9,7 @@ const fs = require("fs")
 
 const client_id = "bf05f03c90364683a6ff33ba75ab909a"
 const client_secret = "9ba17feecc2c4beb961a9a092fe60f48"
-const version = "1.2.3"
+const version = "1.2.4"
 
 const redirect_uri = "http://localhost:1764/callback"
 
@@ -112,7 +112,7 @@ function createWindow() {
                     },
                     icon: path.join(__dirname, "icon.png"),
                     autoHideMenuBar: true
-                }).loadFile(path.join(__dirname, "settings.html"))
+                }).loadFile(path.join(__dirname, "settings", "settings.html"))
             }
         },
         {
@@ -173,14 +173,14 @@ function createWindow() {
                                 icon: path.join(__dirname, "icon.png"),
                                 autoHideMenuBar: true
                             })
-                            brow.loadFile(path.join(__dirname, "settings.html"))
+                            brow.loadFile(path.join(__dirname, "settings", "settings.html"))
 
-                            /* globalShortcut.register('f5', function () {
+                            globalShortcut.register('f5', function () {
                                 brow.reload()
                             })
                             globalShortcut.register('f6', function () {
                                 brow.webContents.openDevTools()
-                            }) */
+                            })
                         }
                     },
                     { role: "quit" }

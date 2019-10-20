@@ -63,6 +63,6 @@ body {
 #wrap-fade-animation .image {
     opacity: 0;
 }
-.pretty{
-    font-size:30px
+#divswitch{
+    width: 500px;
 }
