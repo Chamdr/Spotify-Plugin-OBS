@@ -1,4 +1,9 @@
+const fs = require("fs")
+const path = require("path")
 let oldTitle
+
+let configs = updateConfigs()
+
 setInterval(
     anime({
         targets: '#wrap-round-animation img',
@@ -31,7 +36,6 @@ function updateRessources() {
                     'Content-Type': 'application/json',
                 },
                 success: function (responded) {
-                    console.log(responded)
                     let i = "0";
                     let a = "2";
                     if (responded) {
@@ -78,8 +82,19 @@ function updateRessources() {
         }
     })
 }
+
+function updateConfigs() {
+    let data = fs.readFileSync(path.join(__dirname, "configs.json"))
+
+    try {
+        data = JSON.parse(data)
+        return data
+    } catch (error) { return {} }
+}
 setInterval(updateRessources, 1000)
 updateRessources()
+
+//Account page
 document.getElementById("btn-account").addEventListener("click", () => {
     require("electron").shell.openExternal("https://www.spotify.com/redirect/account-page")
 })
@@ -89,15 +104,20 @@ document.getElementById("btn-disconnect").addEventListener("click", () => {
     require('electron').remote.getCurrentWindow().close()
 })
 
-$("#wrap-no-animation").addClass("border-success")
-//$("#wrap-round-animation").addClass("border border-success")
-//$("#wrap-fade-animation").addClass("border border-success")
-
+//Animation page
+$(`#${configs.animation}`).addClass("border-success")
 $(document).ready(
     function () {
         $(".wrap").click(
             function (event) {
                 $(this).addClass("border-success").siblings().removeClass("border-success");
+                configs.animation = $(this)[0].id
+                fs.writeFileSync(path.join(__dirname, "configs.json"), JSON.stringify(configs), () => { if (err) console.log(error) })
             }
-        );
-    });
+        )
+    })
+
+//Startup page
+document.getElementById("auto-startup-button").addEventListener("click",()=>{
+    console.log(this.id)
+})
