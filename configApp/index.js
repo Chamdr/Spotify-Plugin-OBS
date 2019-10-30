@@ -151,7 +151,7 @@ function createWindow() {
                     {
                         label: "Settings",
                         click: function () {
-                            brow = new BrowserWindow({
+                            new BrowserWindow({
                                 width: 900,
                                 height: 700,
                                 webPreferences: {
@@ -159,16 +159,8 @@ function createWindow() {
                                 },
                                 icon: path.join(__dirname, "icon.png"),
                                 autoHideMenuBar: true
-                            })
-                            brow.loadFile(path.join(__dirname, "settings", "settings.html"))
-
-                            globalShortcut.register('f5', function () {
-                                brow.reload()
-                            })
-                            globalShortcut.register('f6', function () {
-                                brow.webContents.openDevTools()
-                            })
-                        }
+                            }).loadFile(path.join(__dirname, "settings", "settings.html"))
+                        }                          
                     },
                     { role: "quit" }
                 ]
