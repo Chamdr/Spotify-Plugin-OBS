@@ -86,9 +86,9 @@ function updateRessources() {
 }
 
 function updateConfigs() {
-    let data = fs.readFileSync(path.join(__dirname, "configs.json"))
 
     try {
+        let data = fs.readFileSync(path.join(process.env.APPDATA,"spotifypluginobs", "configs.json"))
         data = JSON.parse(data)
         return data
     } catch (error) { return {} }
@@ -140,5 +140,5 @@ smallStartupButton.addEventListener("click",()=>{
 })
 
 function writeConfigs(){
-    fs.writeFileSync(path.join(__dirname, "configs.json"), JSON.stringify(configs), () => { if (err) console.log(error) })
+    fs.writeFileSync(path.join(process.env.APPDATA,"spotifypluginobs", "configs.json"), JSON.stringify(configs), () => { if (err) console.log(error) })
 }

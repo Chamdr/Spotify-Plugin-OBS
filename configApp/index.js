@@ -255,7 +255,7 @@ http.get("/icon.png", (req, res) => {
     res.sendFile(path.join(__dirname, "icon.png"))
 })
 http.get("/configs.json", (req, res) => {
-    res.sendFile(path.join(__dirname, "settings", "configs.json"))
+    res.sendFile(path.join(process.env.APPDATA,"spotifypluginobs", "configs.json"))
 })
 setInterval(() => {
     if (refresh_token) {
@@ -291,9 +291,9 @@ function generateRandomString(length) {
 };
 
 function updateConfigs() {
-    let data = fs.readFileSync(path.join(__dirname, "settings", "configs.json"))
 
     try {
+        let data = fs.readFileSync(path.join(process.env.APPDATA,"spotifypluginobs", "configs.json"))
         data = JSON.parse(data)
         return data
     } catch (error) { return {} }
