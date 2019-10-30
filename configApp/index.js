@@ -21,6 +21,12 @@ let win
 let refresh_token
 let access_token
 
+if (!configs.autoStartup) {
+    Registry.get("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "SpotifyPluginObs").then((results) => {
+        configs.autoStartup = results ? true : false
+        writeConfigs()
+    })
+}
 if (configs.autoStartup === true) {
     Registry.set("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "SpotifyPluginObs", path.join(__dirname, "..", "..", "..", "Spotify-Plugin-OBS.exe"))
 } else {
@@ -160,7 +166,7 @@ function createWindow() {
                                 icon: path.join(__dirname, "icon.png"),
                                 autoHideMenuBar: true
                             }).loadFile(path.join(__dirname, "settings", "settings.html"))
-                        }                          
+                        }
                     },
                     { role: "quit" }
                 ]
@@ -247,7 +253,7 @@ http.get("/icon.png", (req, res) => {
     res.sendFile(path.join(__dirname, "icon.png"))
 })
 http.get("/configs.json", (req, res) => {
-    res.sendFile(path.join(process.env.APPDATA,"spotifypluginobs", "configs.json"))
+    res.sendFile(path.join(process.env.APPDATA, "spotifypluginobs", "configs.json"))
 })
 setInterval(() => {
     if (refresh_token) {
@@ -283,10 +289,13 @@ function generateRandomString(length) {
 };
 
 function updateConfigs() {
-
     try {
-        let data = fs.readFileSync(path.join(process.env.APPDATA,"spotifypluginobs", "configs.json"))
+        let data = fs.readFileSync(path.join(process.env.APPDATA, "spotifypluginobs", "configs.json"))
         data = JSON.parse(data)
         return data
     } catch (error) { return {} }
+}
+
+function writeConfigs() {
+    fs.writeFileSync(path.join(process.env.APPDATA, "spotifypluginobs", "configs.json"), JSON.stringify(configs), () => { if (err) console.log(error) })
 }
