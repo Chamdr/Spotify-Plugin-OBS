@@ -1,5 +1,7 @@
 const fs = require("fs")
 const path = require("path")
+const Registry = require('rage-edit').Registry
+
 let oldTitle
 
 let configs = updateConfigs()
@@ -98,7 +100,7 @@ updateRessources()
 document.getElementById("btn-account").addEventListener("click", () => {
     require("electron").shell.openExternal("https://www.spotify.com/redirect/account-page")
 })
-const ipc = require('electron').ipcRenderer
+
 document.getElementById("btn-disconnect").addEventListener("click", () => {
     ipc.sendSync("disconnect")
     require('electron').remote.getCurrentWindow().close()
@@ -112,12 +114,31 @@ $(document).ready(
             function (event) {
                 $(this).addClass("border-success").siblings().removeClass("border-success");
                 configs.animation = $(this)[0].id
-                fs.writeFileSync(path.join(__dirname, "configs.json"), JSON.stringify(configs), () => { if (err) console.log(error) })
+                writeConfigs()
             }
         )
     })
 
 //Startup page
-document.getElementById("auto-startup-button").addEventListener("click",()=>{
-    console.log(this.id)
+const autoStartupButton = document.getElementById("auto-startup-button")
+autoStartupButton.checked = configs.autoStartup
+
+autoStartupButton.addEventListener("click",()=>{
+    configs.autoStartup = autoStartupButton.checked
+    if(configs.autoStartup === true){
+            Registry.set("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "SpotifyPluginObs", path.join(__dirname, "..", "..", "..", "Spotify-Plugin-OBS.exe"))
+        } else {
+            Registry.delete("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "SpotifyPluginObs")
+        }
+    writeConfigs()
 })
+const smallStartupButton = document.getElementById("small-startup-button")
+smallStartupButton.checked = configs.smallStartup
+smallStartupButton.addEventListener("click",()=>{
+    configs.smallStartup = smallStartupButton.checked
+    writeConfigs()
+})
+
+function writeConfigs(){
+    fs.writeFileSync(path.join(__dirname, "configs.json"), JSON.stringify(configs), () => { if (err) console.log(error) })
+}

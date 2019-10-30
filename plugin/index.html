@@ -59,9 +59,10 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js"></script>
 <script>
-      let oldtitle;
+  let oldtitle;
+  let oldAnimation = "wrap-round-animation"
 
-  /* let animation = anime({
+  let animation = anime({
     targets: '#image',
     rotate: 360,
     keyframes: [
@@ -69,7 +70,7 @@
       { borderRadius: 0 }
     ],
     easing: 'easeInOutQuad'
-  }) */
+  })
 
   setInterval(() => {
     getSpotifyAccessToken()
@@ -112,7 +113,7 @@
 
   //display name, artist and image on the html page
   function displayPlayedMusic(title, image, artist) {
-   // animation.restart()
+    animation.restart()
 
     $("#image").attr("src", image);
     $("#artist").text(artist);
@@ -131,6 +132,44 @@
     }
     oldtitle = title;
   }
+
+  setInterval(() => {
+    $.ajax({
+      request: "GET",
+      url: 'http://localhost:1764/configs.json',
+      success: function (body) {
+
+        if (body.animation !== oldAnimation) {
+          if (body.animation === "wrap-round-animation") {
+            document.getElementById("image").style.webkitTransform = "rotate(0deg)"
+            document.getElementById("image").style.transform = "rotate(0deg)"
+            animation = anime({
+              targets: '#image',
+              rotate: 360,
+              keyframes: [
+                { borderRadius: "100%" },
+                { borderRadius: 0 }
+              ],
+              easing: 'easeInOutQuad'
+            })
+
+          } else if (body.animation === "wrap-fade-animation") {
+            document.getElementById("image").style.opacity = 0
+            animation = anime({
+              targets: '#image',
+              opacity: 1,
+              easing: 'easeInOutQuad'
+            })
+          } else if (body.animation === "wrap-no-animation") {
+            animation = anime({
+              targets: '#image'
+            })
+          }
+          oldAnimation = body.animation
+        }
+      }
+    })
+  }, 1000)
 </script>
 
 </html>

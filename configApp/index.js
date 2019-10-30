@@ -13,12 +13,19 @@ const version = "1.2.4"
 
 const redirect_uri = "http://localhost:1764/callback"
 
+let configs = updateConfigs()
 let http = express()
 http.use(express.static("../plugin/public"))
 let state
 let win
 let refresh_token
 let access_token
+
+if (configs.autoStartup === true) {
+    Registry.set("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "SpotifyPluginObs", path.join(__dirname, "..", "..", "..", "Spotify-Plugin-OBS.exe"))
+} else {
+    Registry.delete("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "SpotifyPluginObs")
+}
 
 function createWindow() {
     win = new BrowserWindow({
@@ -116,19 +123,6 @@ function createWindow() {
             }
         },
         {
-            label: "Démarrer automatiquement",
-            type: "checkbox",
-            click: function () {
-                Registry.get("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "SpotifyPluginObs").then((result) => {
-                    if (result === undefined) {
-                        Registry.set("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "SpotifyPluginObs", path.join(__dirname, "..", "..", "..", "Spotify-Plugin-OBS.exe"))
-                    } else {
-                        Registry.delete("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "SpotifyPluginObs")
-                    }
-                })
-            }
-        },
-        {
             label: 'Quit',
             click: function () {
                 app.isQuiting = true;
@@ -136,12 +130,7 @@ function createWindow() {
                 app.exit()
             }
         }
-    ]);
-
-    Registry.get("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "SpotifyPluginObs").then((result) => {
-        const value = result !== undefined
-        contextMenu.items[1].checked = value ? true : false
-    })
+    ])
     tray.setContextMenu(contextMenu)
 
     win.on('close', function (event) {
@@ -155,8 +144,6 @@ function createWindow() {
 
     win.on('show', function () {
         tray.setHighlightMode('always')
-    })
-    win.once('ready-to-show', () => {
         Menu.setApplicationMenu(Menu.buildFromTemplate([
             {
                 label: "File",
@@ -197,7 +184,11 @@ function createWindow() {
             }
 
         ]))
-        win.show()
+    })
+    win.once('ready-to-show', () => {
+        if (configs.smallStartup !== true) {
+            win.show()
+        }
     })
 }
 
@@ -263,6 +254,9 @@ http.get("/token", (req, res) => {
 http.get("/icon.png", (req, res) => {
     res.sendFile(path.join(__dirname, "icon.png"))
 })
+http.get("/configs.json", (req, res) => {
+    res.sendFile(path.join(__dirname, "settings", "configs.json"))
+})
 setInterval(() => {
     if (refresh_token) {
         var authOptions = {
@@ -295,3 +289,12 @@ function generateRandomString(length) {
     }
     return text;
 };
+
+function updateConfigs() {
+    let data = fs.readFileSync(path.join(__dirname, "settings", "configs.json"))
+
+    try {
+        data = JSON.parse(data)
+        return data
+    } catch (error) { return {} }
+}
