@@ -1,6 +1,6 @@
 {
   "name": "spotifypluginobs",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Plugin OBS permettant d'afficher la musique jouée sur Spotify sur un live avec le logiciel OBS",
   "main": "configApp/index.js",
   "scripts": {
