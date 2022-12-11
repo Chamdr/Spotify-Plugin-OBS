@@ -24,7 +24,7 @@
   "homepage": "https://github.com/DrakLulu/Spotify-Plugin-OBS#readme",
   "dependencies": {
     "bootstrap": "^4.3.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "jquery": "^3.4.1",
     "popper.js": "^1.15.0",
     "querystring": "^0.2.0",
